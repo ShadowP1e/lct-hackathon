@@ -1,0 +1,74 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - .env
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    env_file:
+      - .env
+    volumes:
+      - ./s3/data:/data
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-U ${POSTGRES_USER}", "-d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+  backend:
+    build: /backend
+    command: sh run.sh
+    container_name: backend
+    ports:
+      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - /backend/.env.prod
+    networks:
+      - app-network
+  video_copyright_checker:
+    build: /video_copyright_checker
+    command: python consumer.py
+    env_file:
+      - /video_copyright_checker/.env.prod
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
