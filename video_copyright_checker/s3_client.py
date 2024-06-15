@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from minio import Minio
 from minio.error import S3Error
 
@@ -42,6 +44,22 @@ class MinioClient:
             url = self.client.presigned_get_object(bucket_name, file_name)
             url = remove_query_params(url)
             return url
+        except S3Error as err:
+            print(err)
+            return None
+
+    def get_object(self, bucket_name, file_name, offset=0, length=0):
+        try:
+            response = self.client.get_object(bucket_name, file_name, offset, length)
+            return response.read()
+        except S3Error as err:
+            print(err)
+            return None
+
+    def stat_object(self, bucket_name, file_name):
+        try:
+            object_stat = self.client.stat_object(bucket_name, file_name)
+            return object_stat
         except S3Error as err:
             print(err)
             return None

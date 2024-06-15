@@ -1,15 +1,15 @@
 <template>
-  <h1 class="text-center h3 mb-3 fw-normal">Login Methodist</h1>
+  <h1 class="text-center h3 mb-3 fw-normal">Вход</h1>
 
   <form @submit.prevent="submit">
     <div class="form-floating">
       <input type="email" class="form-control" :class="{'is-invalid': !isValidForm }" name="email" placeholder="name@example.com">
-      <label>Email address</label>
+      <label>Email</label>
     </div>
 
     <div class="form-floating">
       <input type="password" class="form-control" :class="{'is-invalid': !isValidForm }" name="password" placeholder="Password">
-      <label>Password</label>
+      <label>Пароль</label>
     </div>
 
     <div v-if="!isValidForm">
@@ -28,7 +28,7 @@ import {onUnmounted, ref} from "vue";
 import axiosInstance from "@/axiosInstance";
 
 export default {
-  name: "LoginMethodistForm",
+  name: "LoginForm",
   setup() {
     const formError = ref('');
     const isValidForm = ref(true);
@@ -50,15 +50,14 @@ export default {
 
       const inputs = Object.fromEntries(form.entries());
 
-      axiosInstance.post('/methodists/login', inputs, {withCredentials: true})
+      axiosInstance.post('/users/login', inputs, {withCredentials: true})
           .then((response) => {
             console.log(response.data)
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.tokens.access_token}`;
 
             store.dispatch('setUserLoggedIn', true)
-            store.dispatch('setUserRole', 'methodist')
 
-            router.push('/');
+            router.push('/upload-copyright-video');
           })
           .catch((error) => {
             formError.value = 'Incorrect email or password. Please double-check your credentials and try again.'

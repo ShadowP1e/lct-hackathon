@@ -1,7 +1,8 @@
 from uuid import UUID
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from core.config import config
 
 
 class CopyrightVideoPartSchema(BaseModel):

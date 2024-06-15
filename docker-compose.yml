@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -43,6 +41,41 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
+  backend:
+    build: ./backend
+    command: sh run.sh
+    ports:
+      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./.env
+    networks:
+      - app-network
+  video_copyright_checker:
+    build: ./video_copyright_checker
+    command: python consumer.py
+    env_file:
+      - ./.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+  
+  frontend:
+    build: ./frontend
+    command: "nginx -g 'daemon off;'"
+    container_name: frontend
+    ports:
+      - 80:80
+    depends_on:
+      - backend
     networks:
       - app-network
 

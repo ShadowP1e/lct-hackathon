@@ -1,7 +1,10 @@
 import io
 from uuid import UUID, uuid4
 
+from fastapi import File
+
 from core.exceptions import NotFoundError
+from core.config import config
 from schemas.video import VideoCreateSchema, CopyrightVideoSchema
 from utils.unitofwork import IUnitOfWork
 from services.s3 import MinioClient
@@ -10,12 +13,17 @@ import publisher
 
 class CopyrightVideoService:
     @staticmethod
-    async def create(uow: IUnitOfWork, schema: VideoCreateSchema, file: io.BytesIO) -> CopyrightVideoSchema:
+    async def create(uow: IUnitOfWork, schema: VideoCreateSchema, file_data: bytes, file_content_type: str) -> CopyrightVideoSchema:
         async with uow:
             s3_uuid = str(uuid4())
             filename = s3_uuid + '.' + schema.filename.split('.')[-1]
-            url = MinioClient().upload_file('copyright-videos', file, filename)
-            schema.url = url
+            bucket_name = 'copyright-videos'
+
+            file_data = io.BytesIO(file_data)
+            content_type = file_content_type
+            MinioClient().upload_file(bucket_name, file_data, filename, content_type)
+
+            schema.url = f'http://{config.APP_DOMAIN}:{config.APP_PORT}/api/stream/{bucket_name}/{filename}'
 
             video = await uow.copyright_video.create(schema.model_dump())
 
@@ -25,8 +33,8 @@ class CopyrightVideoService:
                 'id': str(video.id),
                 'type': 'add_copyright_video',
                 'filetype': schema.filename.split('.')[-1],
-                's3_uuid': s3_uuid,
-                's3_url': url,
+                'bucket_name': bucket_name,
+                'filename': filename,
             }
             await publisher.send_to_queue('video_copyright_checker', data)
 

@@ -25,12 +25,17 @@ async def check_copyright_video_handler(data: Any):
 
         data = data['data']
         for item in data:
+            bucket_name = item['bucket_name']
+            filename = item['filename']
+
+            url = f'http://{config.APP_DOMAIN}:{config.APP_PORT}/api/stream/{bucket_name}/{filename}'
             schema = AddCopyrightVideoPartSchema(
                 video_id=video.id,
-                url=item['s3_url'],
+                url=url,
                 start=int(item['start']),
                 end=int(item['end']),
             )
+
             await VideoService.add_copyright_video_part(uow, schema)
 
         await uow.commit()

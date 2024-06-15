@@ -8,8 +8,8 @@ load_dotenv()
 @dataclass(frozen=True)
 class Config:
     # rabbitmq
-    RABBITMQ_USER = os.getenv("RABBITMQ_USER")
-    RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
+    RABBITMQ_USER = os.getenv("RABBITMQ_DEFAULT_USER")
+    RABBITMQ_PASSWORD = os.getenv("RABBITMQ_DEFAULT_PASS")
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
 
     # minio s3

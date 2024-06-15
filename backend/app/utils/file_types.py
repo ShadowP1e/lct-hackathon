@@ -7,3 +7,7 @@ allowed_video_types = [
     "video/x-msvideo",
     "video/quicktime",
 ]
+
+allowed_zip_types = [
+    'application/x-zip-compressed'
+]

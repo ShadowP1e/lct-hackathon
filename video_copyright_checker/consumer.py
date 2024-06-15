@@ -27,9 +27,9 @@ channel.queue_declare(queue='video_copyright_checker')
 
 
 def add_copyright_video_handler(data: Any):
-    file_content = download_file(data['s3_url'])
+    file_content = MinioClient().get_object(data['bucket_name'], data['filename'])
 
-    sleep(20)  # make some ml changes
+    sleep(10)  # make some ml changes
 
     result = {
         'video_id': data['id'],
@@ -40,7 +40,7 @@ def add_copyright_video_handler(data: Any):
 
 
 def check_copyright_video_handler(data: Any):
-    file_content = download_file(data['s3_url'])
+    file_content = MinioClient().get_object(data['bucket_name'], data['filename'])
 
     intervals = video_copyright_check(file_content)  # change to normal function
 
@@ -49,17 +49,19 @@ def check_copyright_video_handler(data: Any):
         clip = cut_clip(file_content, start, end)
 
         filename = str(uuid4()) + '.' + data['filetype']
-        url = MinioClient().upload_file('copyright-parts', clip, filename)
+        bucket_name = 'copyright-parts'
+        url = MinioClient().upload_file(bucket_name, clip, filename)
 
         copyright_parts.append(
             {
-                's3_url': url,
+                'filename': filename,
+                'bucket_name': bucket_name,
                 'start': start,
                 'end': end,
             }
         )
 
-    sleep(20)
+    sleep(10)
 
     result = {
         'video_id': data['id'],

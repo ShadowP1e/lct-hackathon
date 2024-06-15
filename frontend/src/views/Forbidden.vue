@@ -1,6 +1,6 @@
 <template>
-  <main class="mx-auto">
-    <h1 class="text-center h1"> Forbidden to see this page </h1>
+  <main class="mt-5">
+    <h1 class="text-center h1"> У вас нет доступа к этой странице </h1>
   </main>
 </template>
 

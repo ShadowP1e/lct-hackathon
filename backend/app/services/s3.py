@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from minio import Minio
 from minio.error import S3Error
 
@@ -46,6 +48,22 @@ class MinioClient:
             print(err)
             return None
 
+    def get_object(self, bucket_name, file_name, offset=0, length=0):
+        try:
+            response = self.client.get_object(bucket_name, file_name, offset, length)
+            return response.read()
+        except S3Error as err:
+            print(err)
+            return None
+
+    def stat_object(self, bucket_name, file_name):
+        try:
+            object_stat = self.client.stat_object(bucket_name, file_name)
+            return object_stat
+        except S3Error as err:
+            print(err)
+            return None
+
     def delete_file(self, bucket_name, file_name):
         try:
             self.client.remove_object(bucket_name, file_name)
@@ -53,11 +71,11 @@ class MinioClient:
         except S3Error as err:
             print(err)
 
-    def upload_file(self, bucket_name, file_data, object_name):
+    def upload_file(self, bucket_name, file_data, object_name, content_type: str = "application/octet-stream"):
         try:
             file_data.seek(0)
             length = len(file_data.getvalue())
-            self.client.put_object(bucket_name, object_name, file_data, length)
+            self.client.put_object(bucket_name, object_name, file_data, length, content_type)
             print(f"File '{object_name}' uploaded successfully to bucket '{bucket_name}'")
             url = self.client.presigned_get_object(bucket_name, object_name)
             url = remove_query_params(url)

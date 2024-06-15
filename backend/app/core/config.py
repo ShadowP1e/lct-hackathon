@@ -13,6 +13,7 @@ class Config:
     PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     APP_HOST: str = '0.0.0.0'
     APP_PORT: int = 8000
+    APP_DOMAIN: str = os.getenv('APP_DOMAIN')
 
     SECRET_KEY = os.getenv("SECRET")
     # database
@@ -38,8 +39,8 @@ class Config:
     MINIO_PASSWORD = os.getenv("MINIO_PASSWORD")
 
     # rabbitmq
-    RABBITMQ_USER = os.getenv("RABBITMQ_USER")
-    RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
+    RABBITMQ_USER = os.getenv("RABBITMQ_DEFAULT_USER")
+    RABBITMQ_PASSWORD = os.getenv("RABBITMQ_DEFAULT_PASS")
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
 
     # default user
