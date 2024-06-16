@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y curl && apt-get install -y libmagic-dev
 
 WORKDIR /app
 
-COPY run.sh .
 
 COPY requirements.txt .
 
