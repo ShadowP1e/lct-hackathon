@@ -50,7 +50,7 @@ scripts - скрипты для алгоритма Shazam
 
 1. Клонируйте репозиторий:
 ```shell
-git clone https://github.com/ShadowP1e/lct-hackathon.git
+git clone git@github.com:ShadowP1e/lct-hackathon.git
 ```
 2. Перейдите в папку проекта
 ```shell

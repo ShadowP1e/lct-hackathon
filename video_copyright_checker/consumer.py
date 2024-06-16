@@ -117,6 +117,7 @@ threads = []
 setup_db()
 os.makedirs('dummy_index', exist_ok = True)
 os.makedirs('dummy_val', exist_ok = True)
+os.makedirs('cache', exist_ok = True)
 
 channel.basic_consume(queue='video_copyright_checker', on_message_callback=callback, auto_ack=False)
 
