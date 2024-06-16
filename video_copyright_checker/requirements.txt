@@ -21,3 +21,13 @@ requests==2.32.3
 tqdm==4.66.4
 typing_extensions==4.12.1
 urllib3==2.2.1
+datasets==2.19.2
+PyAudio==0.2.14
+pydub==0.25.1
+scipy==1.13.1
+pandas==2.2.2
+torch --index-url https://download.pytorch.org/whl/cu121
+accelerate==0.31.0
+transformers==4.41.2
+tokenizers==0.19.1
+ffmpeg==1.4

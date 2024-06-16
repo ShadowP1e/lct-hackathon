@@ -36,7 +36,7 @@
               >
                 <source :src="item.url" />
               </video>
-
+              <p>Источник: {{item.from_filename}}.mp4 </p>
             </div>
           </div>
         </div>

@@ -57,6 +57,7 @@ services:
       - ./.env
     networks:
       - app-network
+
   video_copyright_checker:
     build: ./video_copyright_checker
     command: python consumer.py
@@ -65,6 +66,10 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./video_copyright_checker/hash.db
+        target: /app/hash.db
     networks:
       - app-network
   

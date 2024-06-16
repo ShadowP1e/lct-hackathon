@@ -2,7 +2,18 @@
   <div v-if="finish" class="center" style="margin-top: 50px">
     <div class="message">
       <h1>Видео успешно добавленно</h1>
-      <button @click="accept" class="w-50 btn btn-lg btn-primary mt-3" type="submit">Принять</button>
+      <div style="display: flex; flex-direction: column; align-items: center">
+        <video
+            controls
+            preload="auto"
+            width="700"
+            height="400"
+            data-setup="{}"
+        >
+          <source :src="video_url" />
+        </video>
+        <button @click="accept" class="w-50 btn btn-lg btn-primary mt-3" type="submit">Принять</button>
+      </div>
     </div>
   </div>
 
@@ -35,6 +46,7 @@ export default {
           .then((response) => {
             console.log(response.data)
             if (response.data.finished){
+              video_url.value = response.data.url;
               finish.value = true;
               clearInterval(pollingInterval);
             }
@@ -124,7 +136,7 @@ export default {
 
 .message{
   text-align: center;
-  width: 30vw;
+  width: 80vw;
 }
 
 </style>

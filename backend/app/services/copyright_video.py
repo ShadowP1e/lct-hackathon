@@ -33,8 +33,9 @@ class CopyrightVideoService:
                 'id': str(video.id),
                 'type': 'add_copyright_video',
                 'filetype': schema.filename.split('.')[-1],
-                'bucket_name': bucket_name,
-                'filename': filename,
+                's3_bucket_name': bucket_name,
+                's3_filename': filename,
+                'user_filename': schema.filename,
             }
             await publisher.send_to_queue('video_copyright_checker', data)
 

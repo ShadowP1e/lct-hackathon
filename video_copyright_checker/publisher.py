@@ -6,7 +6,7 @@ import json
 
 from dotenv import load_dotenv
 
-from config import config
+from settings import config
 
 load_dotenv()
 

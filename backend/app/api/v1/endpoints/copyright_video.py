@@ -88,6 +88,6 @@ async def upload_file(uow: UOW, current_user: current_user_or_error,user_ip: cur
 
 
 @router.get('/{video_id}', response_model=CopyrightVideoSchema)
-async def get_video(uow: UOW, video_id: UUID, current_user: current_user_or_error):
+async def get_video(uow: UOW, video_id: UUID):
     response_schema = await CopyrightVideoService.get(uow, id=video_id)
     return response_schema

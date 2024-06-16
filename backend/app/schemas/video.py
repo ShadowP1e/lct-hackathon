@@ -8,6 +8,8 @@ from core.config import config
 class CopyrightVideoPartSchema(BaseModel):
     id: UUID
     video_id: UUID
+    from_filename: str = None
+    from_copyright_video_id: UUID | None = None
     url: str
     start: int
     end: int
@@ -48,5 +50,7 @@ class ListVideoResponse(BaseModel):
 class AddCopyrightVideoPartSchema(BaseModel):
     video_id: UUID
     url: str
+    from_filename: str
+    from_copyright_video_id: UUID | None = None
     start: int
     end: int

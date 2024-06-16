@@ -23,6 +23,8 @@ class CopyrightVideoPart(Base):
     url: Mapped[str] = mapped_column()
     start: Mapped[int] = mapped_column()
     end: Mapped[int] = mapped_column()
+    from_filename: Mapped[str] = mapped_column(default=None, nullable=True)
+    from_copyright_video_id: Mapped[UUID] = mapped_column(default=None, nullable=True)
 
     created_at: Mapped[dt.datetime] = mapped_column(type_=TIMESTAMP(timezone=True), default=get_utc)
     updated_at: Mapped[dt.datetime] = mapped_column(type_=TIMESTAMP(timezone=True), default=get_utc, onupdate=get_utc)

@@ -25,13 +25,18 @@ async def check_copyright_video_handler(data: Any):
 
         data = data['data']
         for item in data:
-            bucket_name = item['bucket_name']
-            filename = item['filename']
+            bucket_name = item['s3_bucket_name']
+            filename = item['s3_filename']
 
             url = f'http://{config.APP_DOMAIN}:{config.APP_PORT}/api/stream/{bucket_name}/{filename}'
+
+            from_copyright_video = await uow.copyright_video.get(filename=item['from_filename'] + '.mp4')
+
             schema = AddCopyrightVideoPartSchema(
                 video_id=video.id,
                 url=url,
+                from_copyright_video_id=from_copyright_video.id if from_copyright_video is not None else None,
+                from_filename=item['from_filename'],
                 start=int(item['start']),
                 end=int(item['end']),
             )

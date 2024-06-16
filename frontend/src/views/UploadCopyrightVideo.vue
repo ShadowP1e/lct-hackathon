@@ -12,7 +12,7 @@
             </label>
           </div>
           <div class="submit-container">
-            <input type="submit" class="submit" value="Submit">
+            <input type="submit" class="submit" value="Отправить">
           </div>
         </form>
       </div>
