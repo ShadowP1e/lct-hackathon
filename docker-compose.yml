@@ -45,7 +45,7 @@ services:
       - app-network
   backend:
     build: ./backend
-    command: sh run.sh
+    command: sh -c "alembic upgrade head && cd app && python main.py"
     ports:
       - 8000:8000
     depends_on:
