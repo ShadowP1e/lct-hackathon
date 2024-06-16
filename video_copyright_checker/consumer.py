@@ -9,12 +9,12 @@ import pika
 from dotenv import load_dotenv
 
 from scripts.storage import setup_db
-from scripts.fingerprint import register_video, register_directory
-from scripts.recognise import recognise_video, recognise_directory
+from scripts.fingerprint import register_video
+from scripts.recognise import recognise_video
 
 from settings import config
 import publisher
-from utils import download_file, cut_clip
+from utils import cut_clip, delete_files_in_folder
 from s3_client import MinioClient
 
 load_dotenv()
@@ -41,6 +41,7 @@ def add_copyright_video_handler(data: Any):
     register_video(f'dummy_index/{data["user_filename"]}')
 
     os.remove(f"dummy_index/{data['user_filename']}")
+    delete_files_in_folder(f"cache")
 
     result = {
         'video_id': data['id'],
@@ -84,6 +85,7 @@ def check_copyright_video_handler(data: Any):
         )
 
     os.remove(f"dummy_val/{data['user_filename']}")
+    delete_files_in_folder(f"cache")
 
     result = {
         'video_id': data['id'],
@@ -98,7 +100,6 @@ def callback(ch, method, properties, body):
     data = json.loads(body)
     print(" [x] Received dictionary:", data)
 
-    ch.basic_ack(delivery_tag=method.delivery_tag)
     if data['type'] == 'add_copyright_video':
         t = threading.Thread(target=add_copyright_video_handler, args=(data, ))
         t.start()
@@ -109,9 +110,13 @@ def callback(ch, method, properties, body):
         t.start()
         threads.append(t)
 
+    ch.basic_ack(delivery_tag=method.delivery_tag)
+
 
 threads = []
 setup_db()
+os.mkdir('dummy_index', exist_ok = True)
+os.mkdir('dummy_val', exist_ok = True)
 
 channel.basic_consume(queue='video_copyright_checker', on_message_callback=callback, auto_ack=False)
 
