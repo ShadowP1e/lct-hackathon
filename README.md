@@ -13,8 +13,8 @@ cache - папка для сохранения временных файлов
 
 scripts - скрипты для алгоритма Shazam  
 --audio2text.py - Перевод аудио в текст  
---fingerprint.py - Cоздание "слепка" видео  (register_video для одного видео, register_directory для папки)
---recognise.py - Проверка видео на плагиат  (recognise_video для одного видео, recognise_directory для папки)
+--fingerprint.py - Cоздание "слепка" видео  (register_video для одного видео, register_directory для папки)  
+--recognise.py - Проверка видео на плагиат  (recognise_video для одного видео, recognise_directory для папки)  
 --storage.py - Скрипты для базы данных  
 
 
