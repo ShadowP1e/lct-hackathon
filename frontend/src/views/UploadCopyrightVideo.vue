@@ -1,5 +1,9 @@
 <template>
   <Forbidden v-if="!store.getters.userIsLoggedIn"/>
+  <div v-if="uploadFile" class="loader-div">
+   <div style="display: flex; justify-content: center"><div id="loader"></div></div>
+    <h2 class="loader-text">Видео отправляется</h2>
+  </div>
   <div v-else>
     <div class="center" style="margin-top: 100px">
       <div class="upload_form">
@@ -24,6 +28,7 @@
 import Forbidden from "@/views/Forbidden";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {ref} from "vue";
 import axiosInstance from "@/axiosInstance";
 
 
@@ -34,12 +39,16 @@ export default {
     const store = useStore();
     const router = useRouter();
 
+    const uploadFile = ref(false);
+
     const extractIds = (response) => {
       return response.map(video => video.id).join('&video=');
     };
 
     const submit = (e) => {
       const form = new FormData(e.target);
+
+      uploadFile.value = true;
 
       axiosInstance.post('/copyright-videos/upload', form, {withCredentials: true})
           .then((response) => {
@@ -59,7 +68,8 @@ export default {
     return{
       store,
       router,
-      submit
+      submit,
+      uploadFile
     }
   }
 
@@ -161,5 +171,50 @@ input[type=file]::file-selector-button:hover {
   display: flex;
   justify-content: right;
 }
+#loader {
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
 
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 }
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}
+.loader-text{
+  text-align: center;
+}
+.loader-div{
+  margin-top: 30vh;
+  width: 100vw;
+}
 </style>

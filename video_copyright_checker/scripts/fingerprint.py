@@ -152,7 +152,7 @@ def register_video(file_path):
     logging.info(f"{current_process().name} started fingerprinting {AUDIO_FILE_PATH}")
 
     hashes = fingerprint_file(AUDIO_FILE_PATH)
-    video_info = get_song_info(AUDIO_FILE_PATH)
+    video_info = get_video_info(AUDIO_FILE_PATH)
 
     try:
         logging.info(f"{current_process().name} waiting to write {AUDIO_FILE_PATH}")
@@ -161,7 +161,7 @@ def register_video(file_path):
             store_video(hashes, video_info)
             logging.info(f"{current_process().name} wrote {AUDIO_FILE_PATH}")
     except NameError:
-        logging.info(f"Single-threaded write of {filename}")
+        logging.info(f"Single-threaded write of {file_path}")
         store_video(hashes, video_info)
 
 

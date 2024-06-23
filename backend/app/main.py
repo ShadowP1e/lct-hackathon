@@ -1,5 +1,5 @@
 import os
-import threading
+import multiprocessing
 
 import click
 import uvicorn
@@ -22,6 +22,7 @@ from consumer import start_consumer
 )
 def main(env: str, debug: bool):
     os.environ["ENV"] = env
+    print(os.environ["ENV"])
     os.environ["DEBUG"] = str(debug)
     uvicorn.run(
         app="app:app",
@@ -32,7 +33,7 @@ def main(env: str, debug: bool):
 
 
 if __name__ == "__main__":
-    thread = threading.Thread(target=start_consumer, daemon=True)
-    thread.start()
+    process = multiprocessing.Process(target=start_consumer)
+    process.start()
     main()
-    thread.join()
+    process.join()

@@ -31,6 +31,7 @@ class Config:
     JWT_SECRET = os.getenv("SECRET")
     JWT_ACCESS_EXPIRE: timedelta = timedelta(minutes=60)
     JWT_REFRESH_EXPIRE: timedelta = timedelta(days=180)
+    COOKIE_SECURE: bool = False
 
     # minio s3
     MINIO_DOMAIN = os.getenv("MINIO_DOMAIN")
@@ -50,8 +51,8 @@ class Config:
 
 @dataclass(frozen=True)
 class ProdConfig(Config):
-    COOKIE_DOMAIN: str = ""
-    CORS_ORIGINS: tuple[str] = ("",)
+    COOKIE_DOMAIN: str = "90.156.227.135"
+    CORS_ORIGINS: tuple[str] = ("http://90.156.227.135", "http://90.156.227.135:8000", "http://90.156.227.135:8080")
     SHOW_DOCS: bool = False
 
 

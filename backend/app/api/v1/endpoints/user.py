@@ -26,7 +26,7 @@ async def login_user(uow: UOW, response: Response, schema: UserLoginRequest):
                         path='/',
                         expires=config.JWT_REFRESH_EXPIRE,
                         samesite='strict',
-                        secure=True,
+                        secure=config.COOKIE_SECURE,
                         )
     return response_schema
 

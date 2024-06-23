@@ -26,7 +26,7 @@ async def refresh_access(request: Request, response: Response):
                         path='/',
                         expires=config.JWT_REFRESH_EXPIRE,
                         samesite='strict',
-                        secure=True,
+                        secure=config.COOKIE_SECURE,
                         )
     return response_schema
 
