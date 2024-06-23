@@ -16,6 +16,7 @@ scripts - скрипты для алгоритма Shazam
 --fingerprint.py - Cоздание "слепка" видео  (register_video для одного видео, register_directory для папки)  
 --recognise.py - Проверка видео на плагиат  (recognise_video для одного видео, recognise_directory для папки)  
 --storage.py - Скрипты для базы данных  
+--video_processing.py - Скрипт для сравнение модальности видео
 
 
 ## Пайплайн поиска плагиата
