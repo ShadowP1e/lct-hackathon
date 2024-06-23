@@ -41,7 +41,7 @@ def add_copyright_video_handler(data: Any):
     register_video(f'dummy_index/{data["user_filename"]}')
 
     os.remove(f"dummy_index/{data['user_filename']}")
-    delete_files_in_folder(f"cache")
+    # delete_files_in_folder(f"cache")
 
     result = {
         'video_id': data['id'],
@@ -85,7 +85,7 @@ def check_copyright_video_handler(data: Any):
         )
 
     os.remove(f"dummy_val/{data['user_filename']}")
-    delete_files_in_folder(f"cache")
+    # delete_files_in_folder(f"cache")
 
     result = {
         'video_id': data['id'],
