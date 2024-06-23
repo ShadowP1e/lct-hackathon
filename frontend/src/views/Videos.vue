@@ -34,7 +34,7 @@ export default {
 
     const fetchVideoStatus = async (id) => {
       try {
-        const response = await axiosInstance.get(`http://localhost:8000/api/videos/${id}`);
+        const response = await axiosInstance.get(`/videos/${id}`);
         return response.data;
       } catch (error) {
         console.error('Error fetching video status:', error);
